@@ -52,7 +52,8 @@ Route::get('/fasilitas', function () {
 });
 
 Route::get('/kegiatan', function () {
-    return view('pages.kegiatan');
+    $kegiatans = \App\Models\Kegiatan::latest()->paginate(6); // pagination 6 per page
+    return view('pages.kegiatan', compact('kegiatans'));
 });
 
 Route::get('/hubungi-kami', function () {
@@ -65,6 +66,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('/admin/fasilitas', App\Http\Controllers\Admin\FasilitasController::class);
+    Route::resource('/admin/kegiatan', App\Http\Controllers\Admin\KegiatanController::class);
+    Route::resource('/admin/komunitas', App\Http\Controllers\Admin\KomunitasController::class);
 });
 
 
