@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Hero;
 use App\Models\Fasilitas;
 use App\Models\Kegiatan;
+use App\Http\Controllers\BookingController;
+use App\Models\Booking;
+use App\Http\Controllers\Admin\BookingApprovalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,8 +48,12 @@ Route::get('/komunitas', function () {
 });
 
 Route::get('/pesan-ruangan', function () {
-    return view('pages.pesan-ruangan');
+    $bookings = Booking::where('status', 'approved')->get();
+
+    return view('pages.pesan-ruangan', compact('bookings'));
 });
+
+Route::post('/booking', [BookingController::class, 'store']);
 
 Route::get('/fasilitas', function () {
     $fasilitas = Fasilitas::latest()->paginate(10); // pagination 10 per page
@@ -70,6 +77,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/admin/fasilitas', App\Http\Controllers\Admin\FasilitasController::class);
     Route::resource('/admin/kegiatan', App\Http\Controllers\Admin\KegiatanController::class);
     Route::resource('/admin/komunitas', App\Http\Controllers\Admin\KomunitasController::class);
+
+    Route::get('/admin/booking', [BookingApprovalController::class, 'index'])->name('admin.booking.index');
+    Route::post('/admin/booking/{id}/approve', [BookingApprovalController::class, 'approve'])->name('admin.booking.approve');
+    Route::post('/admin/booking/{id}/reject', [BookingApprovalController::class, 'reject'])->name('admin.booking.reject');
+
+    Route::get('/admin/booking/{id}/edit', [BookingApprovalController::class, 'edit'])->name('admin.booking.edit');
+    Route::put('/admin/booking/{id}', [BookingApprovalController::class, 'update'])->name('admin.booking.update');
+    Route::delete('/admin/booking/{id}', [BookingApprovalController::class, 'destroy'])->name('admin.booking.destroy');
 });
 
 
