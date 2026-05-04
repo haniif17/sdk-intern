@@ -38,13 +38,14 @@ class KomunitasController extends Controller
             'image' => 'nullable|image',
         ]);
 
+        $imagePath = null;
+
         // Upload image if available
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images/komunitas'), $filename);
-        } else {
-            $filename = null;
+            $imagePath = 'images/komunitas/' . $filename;
         }
 
         Komunitas::create([
@@ -52,7 +53,7 @@ class KomunitasController extends Controller
             'deskripsi' => $request->deskripsi,
             'tanggal_gabung' => $request->tanggal_gabung,
             'jumlah_anggota' => $request->jumlah_anggota,
-            'image' => 'images/komunitas/' . $filename,
+            'image' => $imagePath,
         ]);
 
         return redirect('/admin/komunitas')->with('success', 'Komunitas berhasil ditambahkan');
@@ -61,16 +62,19 @@ class KomunitasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Komunitas $komunitas)
+    public function edit($id)
     {
+        $komunitas = Komunitas::findOrFail($id);
         return view('admin.komunitas.edit', compact('komunitas'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Komunitas $komunitas)
+    public function update(Request $request, $id)
     {
+        $komunitas = Komunitas::findOrFail($id);
+
         $request->validate([
             'nama_komunitas' => 'required',
             'deskripsi' => 'required',
@@ -81,6 +85,11 @@ class KomunitasController extends Controller
 
         // Update image if available
         if ($request->hasFile('image')) {
+            // Hapus gambar lama dulu sebelum upload yang baru
+            if (!empty($komunitas->image) && file_exists(public_path($komunitas->image))) {
+                unlink(public_path($komunitas->image));
+            }
+
             $image = $request->file('image');
             $filename = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images/komunitas'), $filename);
@@ -92,6 +101,7 @@ class KomunitasController extends Controller
             'deskripsi' => $request->deskripsi,
             'tanggal_gabung' => $request->tanggal_gabung,
             'jumlah_anggota' => $request->jumlah_anggota,
+            // Perhatikan: 'image' tidak perlu dimasukkan di sini karena sudah di-handle di atas
         ]);
 
         return redirect('/admin/komunitas')->with('success', 'Komunitas berhasil diperbarui');
@@ -100,13 +110,14 @@ class KomunitasController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Komunitas $komunitas)
+    public function destroy($id)
     {
-        if (!empty($komunitas->image)) {
+        $komunitas = Komunitas::findOrFail($id);
 
+        if (!empty($komunitas->image)) {
             $path = public_path($komunitas->image);
 
-            // hanya hapus kalau itu FILE
+            // Hanya hapus kalau itu file dan beneran ada
             if (file_exists($path) && is_file($path)) {
                 unlink($path);
             }
