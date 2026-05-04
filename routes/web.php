@@ -39,7 +39,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/komunitas', function () {
-    return view('pages.komunitas');
+    $komunitas = \App\Models\Komunitas::latest()->get();
+
+    return view('pages.komunitas', compact('komunitas'));
 });
 
 Route::get('/pesan-ruangan', function () {
