@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Hero;
 use App\Models\Fasilitas;
+use App\Models\Kegiatan;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,9 @@ Route::get('/', function () {
 
     $fasilitas = Fasilitas::latest()->take(4)->get();
 
-    return view('pages.home', compact('heroes', 'fasilitas'));
+    $kegiatans = Kegiatan::latest()->take(2)->get();
+
+    return view('pages.home', compact('heroes', 'fasilitas', 'kegiatans'));
 });
 
 Route::get('/dashboard', function () {

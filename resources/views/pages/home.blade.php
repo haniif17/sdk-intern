@@ -194,6 +194,74 @@
 
 </section>
 
+{{-- INFOGRAFIS --}}
+<section class="px-6 py-12">
+
+    <div class="max-w-7xl mx-auto">
+
+        <div class="w-full aspect-[3/1] rounded-3xl overflow-hidden">
+
+            <img src="{{ asset('images/fasilitas/infografis.png') }}"
+                 class="w-full h-full object-cover">
+
+        </div>
+
+    </div>
+
+</section>
+
+{{-- Kegiatan Terbaru --}}
+<section class="px-6 py-12">
+
+    <div class="max-w-7xl mx-auto">
+
+        {{-- TITLE --}}
+        <h2 class="text-4xl font-semibold mb-10 text-center">
+            Kegiatan Terbaru
+        </h2>
+
+        {{-- GRID --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            @foreach($kegiatans as $kegiatan)
+                <div class="relative group cursor-pointer rounded-3xl overflow-hidden">
+
+                    {{-- IMAGE --}}
+                    <img src="{{ asset($kegiatan->image) }}"
+                         class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+
+                    {{-- GRADIENT OVERLAY --}}
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+
+                    {{-- CONTENT --}}
+                    <div class="absolute bottom-6 left-6 right-6 text-white">
+
+                        {{-- DATE --}}
+                        <p class="text-sm opacity-80 mb-1">
+                            {{ \Carbon\Carbon::parse($kegiatan->tanggal)->format('d M Y') }}
+                        </p>
+
+                        {{-- TITLE --}}
+                        <h3 class="text-2xl font-semibold leading-snug">
+                            {{ $kegiatan->nama_kegiatan }}
+                        </h3>
+
+                        {{-- DESC --}}
+                        <p class="text-sm mt-2 opacity-90">
+                            {{ \Illuminate\Support\Str::limit($kegiatan->deskripsi, 80) }}
+                        </p>
+
+                    </div>
+
+                </div>
+            @endforeach
+
+        </div>
+
+    </div>
+
+</section>
+
 {{-- SCRIPT --}}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
