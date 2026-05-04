@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Hero;
+use App\Models\Fasilitas;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('pages.home');
+
+    $heroes = Hero::latest()->get();
+
+    $fasilitas = Fasilitas::latest()->take(4)->get();
+
+    return view('pages.home', compact('heroes', 'fasilitas'));
 });
 
 Route::get('/dashboard', function () {
@@ -37,7 +44,8 @@ Route::get('/pesan-ruangan', function () {
 });
 
 Route::get('/fasilitas', function () {
-    return view('pages.fasilitas');
+    $fasilitas = Fasilitas::latest()->paginate(10); // pagination 10 per page
+    return view('pages.fasilitas', compact('fasilitas'));
 });
 
 Route::get('/kegiatan', function () {
@@ -52,6 +60,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.dashboard');
     });
+
+    Route::resource('/admin/fasilitas', App\Http\Controllers\Admin\FasilitasController::class);
 });
+
 
 require __DIR__.'/auth.php';

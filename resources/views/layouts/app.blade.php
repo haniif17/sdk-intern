@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SDK Project</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {{-- Open Sans --}}
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- Vite (WAJIB Laravel) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-white font-[Poppins]">
+<body class="bg-white font-sans">
 
     @include('components.navbar')
 
