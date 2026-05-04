@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,43 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('pages.home');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/komunitas', function () {
+    return view('pages.komunitas');
+});
+
+Route::get('/pesan-ruangan', function () {
+    return view('pages.pesan-ruangan');
+});
+
+Route::get('/fasilitas', function () {
+    return view('pages.fasilitas');
+});
+
+Route::get('/kegiatan', function () {
+    return view('pages.kegiatan');
+});
+
+Route::get('/hubungi-kami', function () {
+    return view('pages.hubungi-kami');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin', function () {
+        return view('admin.dashboard');
+    });
+});
+
+require __DIR__.'/auth.php';
