@@ -41,10 +41,10 @@
 
                 {{-- BUTTON --}}
                 <div class="flex justify-end mt-4">
-                    <a href="#"
-                       class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full text-sm">
+                    <button onclick="openModal({{ $kegiatan->id }})"
+                        class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full text-sm">
                         Detail
-                    </a>
+                    </button>
                 </div>
 
             </div>
@@ -60,5 +60,65 @@
     </div>
 
 </section>
+
+{{-- MODAL --}}
+<div id="modal"
+     onclick="closeModal(event)"
+     class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+
+    <div class="bg-white rounded-2xl p-6 max-w-lg w-full relative mx-4"
+         onclick="event.stopPropagation()">
+
+        <button onclick="closeModal()"
+            class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-xl font-bold">
+            ✕
+        </button>
+
+        <img id="modalImage" class="w-full h-56 object-cover rounded-lg mb-4">
+
+        <h3 id="modalTitle" class="text-2xl font-semibold mb-2"></h3>
+
+        <p id="modalDesc" class="text-gray-600 mb-4"></p>
+
+        <p id="modalDate" class="text-sm text-gray-500"></p>
+
+    </div>
+
+</div>
+
+<script>
+    // ⚠️ PENTING: karena pagination, ambil .data
+    const dataKegiatan = @json($kegiatans->items());
+
+    function openModal(id) {
+        const item = dataKegiatan.find(k => k.id === id);
+        if (!item) return;
+
+        document.getElementById('modal').classList.remove('hidden');
+        document.getElementById('modal').classList.add('flex');
+
+        document.getElementById('modalImage').src = '/' + item.image;
+        document.getElementById('modalTitle').innerText = item.nama_kegiatan;
+        document.getElementById('modalDesc').innerText = item.deskripsi;
+        document.getElementById('modalDate').innerText = 'Tanggal: ' + item.tanggal;
+
+        document.body.classList.add('overflow-hidden');
+    }
+
+    function closeModal(event = null) {
+        if (event && event.target !== document.getElementById('modal')) return;
+
+        document.getElementById('modal').classList.add('hidden');
+        document.getElementById('modal').classList.remove('flex');
+
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape") {
+            closeModal();
+        }
+    });
+</script>
 
 @endsection

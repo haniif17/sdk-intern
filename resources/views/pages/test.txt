@@ -163,17 +163,12 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
 
             @foreach($fasilitas as $item)
-                <div onclick="openModal(
-                        '{{ asset($item->image) }}',
-                        '{{ addslashes($item->title) }}',
-                        `{{ addslashes($item->description) }}`
-                    )"
-                    class="cursor-pointer border-2 border-black/30 rounded-2xl p-8 min-h-[220px]
-                        shadow-sm hover:shadow-xl hover:border-black
-                        transition-all duration-300 ease-out">
+                <div class="border-2 border-black/30 rounded-2xl p-8 min-h-[220px]
+                            shadow-sm hover:shadow-xl hover:border-black
+                            transition-all duration-300 ease-out">
 
                     <img src="{{ asset($item->image) }}"
-                        class="w-full h-[150px] object-cover rounded-2xl mb-4">
+                         class="w-full h-[150px] object-cover rounded-2xl mb-4">
 
                     <h3 class="text-lg font-semibold text-center">
                         {{ $item->title }}
@@ -229,17 +224,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             @foreach($kegiatans as $kegiatan)
-                <div onclick="openModal(
-                        '{{ asset($kegiatan->image) }}',
-                        '{{ addslashes($kegiatan->nama_kegiatan) }}',
-                        `{{ addslashes($kegiatan->deskripsi) }}`,
-                        'Tanggal: {{ \Carbon\Carbon::parse($kegiatan->tanggal)->format("d M Y") }}'
-                    )"
-                    class="relative group cursor-pointer rounded-3xl overflow-hidden">
+                <div class="relative group cursor-pointer rounded-3xl overflow-hidden">
 
                     {{-- IMAGE --}}
                     <img src="{{ asset($kegiatan->image) }}"
-                        class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
+                         class="w-full h-[350px] object-cover transition-transform duration-500 group-hover:scale-105">
 
                     {{-- GRADIENT OVERLAY --}}
                     <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
@@ -335,56 +324,6 @@ document.addEventListener("DOMContentLoaded", function () {
     slider.addEventListener('mouseleave', startSlider);
 
     startSlider();
-});
-</script>
-
-{{-- MODAL --}}
-<div id="modal"
-    onclick="closeModal(event)"
-    class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
-
-    <div class="bg-white rounded-2xl p-6 max-w-lg w-full relative mx-4"
-        onclick="event.stopPropagation()">
-
-        <button onclick="closeModal()"
-            class="absolute top-4 right-4 text-xl font-bold">
-            ✕
-        </button>
-
-        <img id="modalImage" class="w-full h-56 object-cover rounded-lg mb-4">
-
-        <h3 id="modalTitle" class="text-xl font-semibold text-center mb-2"></h3>
-
-        <p id="modalDesc" class="text-center text-gray-600"></p>
-
-        <p id="modalExtra" class="text-sm text-gray-500 text-center mt-2"></p>
-    </div>
-</div>
-
-<script>
-function openModal(image, title, desc, extra = '') {
-    document.getElementById('modal').classList.remove('hidden');
-    document.getElementById('modal').classList.add('flex');
-
-    document.getElementById('modalImage').src = image;
-    document.getElementById('modalTitle').innerText = title;
-    document.getElementById('modalDesc').innerText = desc;
-    document.getElementById('modalExtra').innerText = extra;
-
-    document.body.classList.add('overflow-hidden');
-}
-
-function closeModal(event = null) {
-    if (event && event.target !== document.getElementById('modal')) return;
-
-    document.getElementById('modal').classList.add('hidden');
-    document.getElementById('modal').classList.remove('flex');
-
-    document.body.classList.remove('overflow-hidden');
-}
-
-document.addEventListener('keydown', function(e) {
-    if (e.key === "Escape") closeModal();
 });
 </script>
 
