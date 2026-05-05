@@ -27,25 +27,44 @@
 
         {{-- TEXT --}}
         <div class="absolute bottom-6 left-6 text-white max-w-md z-30">
-            <h1 class="text-4xl md:text-5xl font-bold leading-tight">
-                Lorem <br> Ipsum
+            <h1 class="text-4xl md:text-5xl font-semibold leading-tight font-['Open_Sans']">
+                Ruang <br>
+                <span class="ml-12 md:ml-20 inline-block text-white-600">Kolaborasi</span>
             </h1>
 
             <div class="mt-4 flex space-x-3">
                 <a href="/pesan-ruangan" class="bg-red-500 px-4 py-2 rounded-full text-white">
                     Pesan Ruangan
                 </a>
-                <a href="#" class="border border-white px-4 py-2 rounded-full text-white">
+                <button onclick="document.getElementById('sdkModal').classList.remove('hidden')" class="border border-white px-4 py-2 rounded-full text-white hover:bg-white hover:text-black transition duration-300">
                     Detail Lengkap
-                </a>
+                </button>
             </div>
         </div>
 
         {{-- BOX --}}
-        <div class="absolute right-6 bottom-6 bg-white/90 backdrop-blur-md rounded-2xl p-6 w-[300px] z-30">
-            <p class="text-gray-700 text-sm">
-                Lorem ipsum dolor sit amet.
-            </p>
+        <div class="absolute right-6 bottom-6 bg-white/90 backdrop-blur-md shadow-xl rounded-2xl p-5 w-[300px] z-30 border border-white/40">
+            <div class="flex items-start gap-3 mb-2">
+                {{-- Ikon Pin Lokasi (Merah) --}}
+                <div class="mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 text-base">Lokasi Kami</h4>
+                    <p class="text-gray-600 text-sm mt-1 leading-relaxed">
+                        Kunjungi ruang kolaborasi Semarang Digital Kreatif (SDK).
+                    </p>
+                </div>
+            </div>
+            
+            {{-- Tombol Link Google Maps --}}
+            <a href="https://share.google/St9Mo5H90U4wAFYoz" target="_blank" 
+            class="mt-4 flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition duration-200 shadow-sm">
+                Buka di Google Maps
+            </a>
         </div>
 
         {{-- BUTTONS --}}
@@ -387,5 +406,37 @@ document.addEventListener('keydown', function(e) {
     if (e.key === "Escape") closeModal();
 });
 </script>
+
+<!-- ================= POPUP MODAL SDK ================= -->
+<div id="sdkModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-60 flex items-center justify-center p-4 transition-opacity">
+    <!-- Konten Modal -->
+    <div class="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6 relative transform transition-all">
+        
+        <!-- Tombol X (Tutup) di pojok kanan atas -->
+        <button onclick="document.getElementById('sdkModal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <!-- Judul Popup -->
+        <h3 class="text-2xl font-semibold mb-3 text-gray-800 border-b pb-2">
+            Tentang SDK
+        </h3>
+
+        <!-- Isi Teks (Sesuai Brief Lu) -->
+        <p class="text-gray-600 leading-relaxed text-justify mt-4">
+            Semarang Digital Kreatif (SDK) adalah coworking space dan pusat komunitas digital yang diinisiasi oleh Pemerintah Kota Semarang bersama mitra (seperti Telkom/Indigospace) untuk memfasilitasi komunitas kreatif dan IT. Diresmikan pada 2016, SDK menyediakan ruang kerja gratis, fasilitas internet, dan ruang pertemuan untuk berkolaborasi serta mengembangkan konten digital di Semarang.
+        </p>
+        
+        <!-- Tombol Tutup di Bawah -->
+        <div class="mt-6 flex justify-end">
+            <button onclick="document.getElementById('sdkModal').classList.add('hidden')" class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded-lg transition duration-200">
+                Tutup
+            </button>
+        </div>
+        
+    </div>
+</div>
 
 @endsection

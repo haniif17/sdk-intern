@@ -4,9 +4,9 @@
 
 <div class="max-w-7xl mx-auto px-6 py-16">
 
-    <h1 class="text-3xl font-semibold text-center mb-10">
+    <h2 class="text-4xl font-semibold text-center mb-10">
         Pesan Ruangan
-    </h1>
+    </h2>
 
     <div class="grid md:grid-cols-2 gap-10">
 

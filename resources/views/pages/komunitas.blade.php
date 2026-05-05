@@ -6,7 +6,7 @@
 
     <div class="max-w-7xl mx-auto">
 
-        <h2 class="text-4xl font-semibold mb-10 text-center">
+        <h2 class="text-4xl font-semibold text-center mb-10">
             Komunitas
         </h2>
 

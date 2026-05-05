@@ -6,7 +6,7 @@
     <div class="max-w-7xl mx-auto">
 
         {{-- TITLE --}}
-        <h2 class="text-4xl md:text-5xl font-semibold text-center mb-10">
+        <h2 class="text-4xl font-semibold text-center mb-10">
             Fasilitas Kami
         </h2>
 
