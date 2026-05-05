@@ -19,5 +19,8 @@
         @yield('content')
     </main>
 
+    {{-- PANGGIL FOOTER DI SINI --}}
+    @include('components.footer')
+    
 </body>
 </html>
