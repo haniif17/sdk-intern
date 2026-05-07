@@ -10,10 +10,19 @@ class Komunitas extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'nama_komunitas',
+        'username',
+        'email',
+        'nama_ketua',
         'deskripsi',
-        'tanggal_gabung',
         'jumlah_anggota',
-        'image',
+        'logo',
+        'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

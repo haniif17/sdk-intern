@@ -29,7 +29,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Ambil role user yang login
+        $role = $request->user()->role;
+
+        // Arahkan ke nama rute yang sudah kita buat di web.php
+        if ($role === 'admin') {
+            return redirect()->intended(route('admin.dashboard'));
+        } elseif ($role === 'komunitas') {
+            return redirect()->intended(route('komunitas.dashboard'));
+        }
+
+        // Fallback kalau role nggak jelas
+        return redirect()->intended('/');
     }
 
     /**

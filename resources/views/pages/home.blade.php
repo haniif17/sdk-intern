@@ -23,31 +23,64 @@
         @endforeach
 
         {{-- DARK OVERLAY --}}
-        <div class="absolute inset-0 bg-black/30 rounded-2xl z-20"></div>
+        <div class="absolute inset-0 bg-black/40 rounded-2xl z-20"></div>
 
-        {{-- TEXT --}}
-        <div class="absolute bottom-6 left-6 text-white max-w-md z-30">
+        {{-- TEXT & BUTTONS --}}
+        <div class="absolute bottom-6 left-6 text-white max-w-xl z-30">
+            
             <h1 class="text-4xl md:text-5xl font-semibold leading-tight font-['Open_Sans']">
                 Ruang <br>
-                <span class="ml-12 md:ml-20 inline-block text-white-600">Kolaborasi</span>
+                <span class="ml-12 md:ml-20 inline-block text-white">Kolaborasi</span>
             </h1>
 
-            <div class="mt-4 flex space-x-3">
-                <a href="/pesan-ruangan" class="bg-red-500 px-4 py-2 rounded-full text-white">
+            <div class="mt-6 flex flex-wrap gap-3">
+                {{-- Button Pesan Ruangan --}}
+                <a href="/pesan-ruangan" class="bg-red-600 hover:bg-red-700 text-white font-medium px-5 py-2.5 rounded-full transition duration-300 shadow-md">
                     Pesan Ruangan
                 </a>
-                <button onclick="document.getElementById('sdkModal').classList.remove('hidden')" class="border border-white px-4 py-2 rounded-full text-white hover:bg-white hover:text-black transition duration-300">
+                
+                {{-- Button Daftar Tamu (Arah ke GForm) --}}
+                <a href="https://forms.gle/UX6WyWizBeZe2cB36" target="_blank" class="bg-red-600 hover:bg-red-700 text-white font-medium px-5 py-2.5 rounded-full transition duration-300 shadow-md">
+                    Daftar Tamu
+                </a>
+                
+                {{-- Button Detail Lengkap (Buka Modal) --}}
+                <button onclick="document.getElementById('sdkModal').classList.remove('hidden')" class="border-2 border-white text-white font-medium px-5 py-2.5 rounded-full hover:bg-white hover:text-gray-900 transition duration-300">
                     Detail Lengkap
                 </button>
             </div>
         </div>
 
-        {{-- BOX --}}
-        <div class="absolute right-6 bottom-6 bg-white/90 backdrop-blur-md shadow-xl rounded-2xl p-5 w-[300px] z-30 border border-white/40">
+        {{-- BOX DAFTAR KOMUNITAS (Style samain kek Box Lokasi) --}}
+        <div class="hidden md:block absolute right-6 bottom-[220px] bg-white/90 backdrop-blur-md shadow-xl rounded-2xl p-5 w-[300px] z-30 border border-white/40">
+            <div class="flex items-start gap-3 mb-2">
+                {{-- Ikon Users/Community (Merah) --}}
+                <div class="mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 text-base uppercase">Ayo Daftar!</h4>
+                    <p class="text-gray-600 text-sm mt-1 leading-relaxed">
+                        Daftarkan komunitas Anda di Semarang Digital Kreatif (SDK).
+                    </p>
+                </div>
+            </div>
+            
+            {{-- Tombol Daftar (Merah) --}}
+            <a href="{{ route('komunitas.register') }}" 
+               class="mt-4 flex items-center justify-center w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition duration-200 shadow-sm">
+                Daftar Komunitas
+            </a>
+        </div>
+
+        {{-- BOX LOKASI --}}
+        <div class="hidden md:block absolute right-6 bottom-6 bg-white/90 backdrop-blur-md shadow-xl rounded-2xl p-5 w-[300px] z-30 border border-white/40">
             <div class="flex items-start gap-3 mb-2">
                 {{-- Ikon Pin Lokasi (Merah) --}}
                 <div class="mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z" />
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -60,27 +93,31 @@
                 </div>
             </div>
             
-            {{-- Tombol Link Google Maps --}}
+            {{-- Tombol Link Google Maps (Diubah ke Merah) --}}
             <a href="https://share.google/St9Mo5H90U4wAFYoz" target="_blank" 
-            class="mt-4 flex items-center justify-center w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition duration-200 shadow-sm">
+               class="mt-4 flex items-center justify-center w-full bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 px-4 rounded-lg transition duration-200 shadow-sm">
                 Buka di Google Maps
             </a>
         </div>
 
-        {{-- BUTTONS --}}
-        <button id="prevBtn" class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/40 text-white px-3 py-2 rounded-full">
-            ←
+        {{-- NAVIGATION ARROWS --}}
+        <button id="prevBtn" class="absolute left-4 top-1/2 -translate-y-1/2 z-40 bg-black/40 hover:bg-black/60 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
         </button>
 
-        <button id="nextBtn" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/40 text-white px-3 py-2 rounded-full">
-            →
+        <button id="nextBtn" class="absolute right-4 top-1/2 -translate-y-1/2 z-40 bg-black/40 hover:bg-black/60 text-white w-10 h-10 flex items-center justify-center rounded-full transition">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
         </button>
 
         {{-- DOTS --}}
-        <div id="dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2 z-40">
+        <div id="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2 z-40">
             @foreach($heroes as $index => $hero)
-                <div class="dot w-3 h-3 rounded-full cursor-pointer
-                    {{ $index === 0 ? 'bg-white' : 'bg-white/50' }}"></div>
+                <div class="dot w-2.5 h-2.5 rounded-full cursor-pointer transition-colors duration-300
+                    {{ $index === 0 ? 'bg-white' : 'bg-white/40 hover:bg-white/60' }}"></div>
             @endforeach
         </div>
 

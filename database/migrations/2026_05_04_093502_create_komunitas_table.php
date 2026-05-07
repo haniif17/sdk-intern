@@ -13,11 +13,19 @@ return new class extends Migration
     {
         Schema::create('komunitas', function (Blueprint $table) {
             $table->id();
+            // Menghubungkan ke tabel users (untuk login)
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            
             $table->string('nama_komunitas');
-            $table->text('deskripsi');
-            $table->date('tanggal_gabung');
+            $table->string('username')->unique();
+            $table->string('email')->unique();
+            $table->string('nama_ketua');
             $table->integer('jumlah_anggota');
-            $table->string('image')->nullable();
+            $table->string('logo')->nullable(); // Ganti 'image' jadi 'logo' biar sesuai request
+            
+            // Status Moderasi: default 'pending'
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            
             $table->timestamps();
         });
     }

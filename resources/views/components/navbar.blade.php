@@ -85,9 +85,14 @@
 
         </ul>
 
-        {{-- Button (Desktop) --}}
-        <div class="hidden md:block">
-            <a href="/login" class="bg-red-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-600 transition shadow-sm">
+        {{-- Buttons Group (Desktop) --}}
+        <div class="hidden md:flex items-center space-x-3">
+            {{-- Tombol Outline buat Daftar --}}
+            <a href="/daftar-komunitas" class="border-2 border-red-500 text-red-500 bg-white px-5 py-2 rounded-full font-semibold hover:bg-red-50 transition shadow-sm">
+                Daftar Komunitas 
+            </a>
+            {{-- Tombol Solid buat Login --}}
+            <a href="/login" class="bg-red-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-red-600 transition shadow-sm border-2 border-red-500">
                 Masuk
             </a>
         </div>
@@ -122,8 +127,13 @@
             <li>
                 <a href="/hubungi-kami" class="block {{ request()->is('hubungi-kami') ? 'text-red-500 font-semibold' : 'text-gray-700 hover:text-red-500' }}">HUBUNGI KAMI</a>
             </li>
-            <li class="pt-4 border-t border-gray-100">
-                <a href="/login" class="inline-block w-full text-center bg-red-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-600 transition shadow-sm">
+            
+            {{-- Grup Tombol Mobile pakai flex-col biar ada jaraknya --}}
+            <li class="pt-4 border-t border-gray-100 flex flex-col space-y-3">
+                <a href="/daftar-komunitas" class="inline-block w-full text-center border-2 border-red-500 text-red-500 bg-white px-5 py-2 rounded-full font-semibold hover:bg-red-50 transition shadow-sm">
+                    Daftar Komunitas
+                </a>    
+                <a href="/login" class="inline-block w-full text-center bg-red-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-red-600 transition shadow-sm border-2 border-red-500">
                     Masuk
                 </a>
             </li>

@@ -15,19 +15,29 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
 
             @foreach($komunitas as $item)
-                <div onclick="openModal({{ $item->id }})"
-                     class="cursor-pointer rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-lg hover:border-red-400 hover:-translate-y-1 transition duration-300 flex flex-col h-full bg-[#F4F1E8] group">
-
-                    {{-- h-48 bikin tingginya pas, nggak terlalu kotak raksasa --}}
-                    <img src="{{ asset($item->image) }}"
-                         class="w-full h-48 object-cover group-hover:scale-105 transition duration-500">
-
-                    <div class="p-4 flex-grow flex items-center justify-center text-center relative z-10 bg-[#F4F1E8]">
-                        <h3 class="text-base font-bold text-gray-800 line-clamp-2 group-hover:text-red-600 transition">
-                            {{ $item->nama_komunitas }}
-                        </h3>
+                {{-- PERBAIKAN 1: Tambahkan onclick, cursor-pointer, dan efek hover di sini --}}
+                <div onclick="openModal({{ $item->id }})" class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 flex flex-col cursor-pointer hover:shadow-xl transition-all hover:-translate-y-1">
+                    
+                    {{-- Bagian Gambar/Logo --}}
+                    <div class="h-48 w-full overflow-hidden bg-gray-100">
+                        @if($item->logo)
+                            <img src="{{ asset($item->logo) }}" alt="{{ $item->nama_komunitas }}" class="w-full h-full object-cover">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-gray-400">
+                                <span>No Logo</span>
+                            </div>
+                        @endif
                     </div>
-
+                    
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-gray-800">{{ $item->nama_komunitas }}</h3>
+                        <p class="text-sm text-red-500 font-semibold mb-3">{{ $item->jumlah_anggota }} Anggota</p>
+                        
+                        {{-- Bagian Deskripsi --}}
+                        <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                            {!! nl2br(e($item->deskripsi ?? 'Belum ada deskripsi komunitas.')) !!}
+                        </p>
+                    </div>
                 </div>
             @endforeach
 
@@ -50,7 +60,12 @@
         </button>
 
         {{-- Gambar Modal --}}
-        <img id="modalImage" class="w-full h-56 object-cover rounded-xl mb-5 shadow-sm border border-gray-100">
+        <div class="w-full h-56 mb-5 bg-gray-100 rounded-xl overflow-hidden border border-gray-100">
+            <img id="modalImage" class="w-full h-full object-cover hidden">
+            <div id="modalNoImage" class="w-full h-full flex items-center justify-center text-gray-400 hidden">
+                <span>No Logo</span>
+            </div>
+        </div>
 
         {{-- Judul & Deskripsi --}}
         <h3 id="modalTitle" class="text-2xl font-bold mb-2 text-gray-800"></h3>
@@ -87,18 +102,42 @@
     const dataKomunitas = @json($komunitas);
 
     function openModal(id) {
+        // Cari data komunitas berdasarkan ID
         const item = dataKomunitas.find(k => k.id === id);
 
+        if (!item) return; // Mencegah error jika data tidak ditemukan
+
+        // Tampilkan Modal
         document.getElementById('modal').classList.remove('hidden');
         document.getElementById('modal').classList.add('flex');
 
-        document.getElementById('modalImage').src = '/' + item.image;
-        document.getElementById('modalTitle').innerText = item.nama_komunitas;
-        document.getElementById('modalDesc').innerText = item.deskripsi;
+        // PERBAIKAN 2: Penanganan Gambar (menggunakan item.logo bukan item.image)
+        const imgElement = document.getElementById('modalImage');
+        const noImgElement = document.getElementById('modalNoImage');
         
-        // Cukup masukin nilainya aja karena labelnya udah pakai ikon
-        document.getElementById('modalDate').innerText = item.tanggal_gabung;
-        document.getElementById('modalMember').innerText = item.jumlah_anggota + ' Anggota';
+        if (item.logo) {
+            // Asumsi asset() menggunakan root path '/'
+            imgElement.src = '/' + item.logo; 
+            imgElement.classList.remove('hidden');
+            noImgElement.classList.add('hidden');
+        } else {
+            imgElement.classList.add('hidden');
+            noImgElement.classList.remove('hidden');
+        }
+
+        // Set Text Konten dengan nilai fallback jika kosong
+        document.getElementById('modalTitle').innerText = item.nama_komunitas;
+        document.getElementById('modalDesc').innerText = item.deskripsi ? item.deskripsi : 'Belum ada deskripsi komunitas.';
+        
+        document.getElementById('modalDate').innerText =
+            item.created_at
+            ? new Date(item.created_at).toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            })
+            : '-';
+        document.getElementById('modalMember').innerText = (item.jumlah_anggota ? item.jumlah_anggota : '0') + ' Anggota';
     }
 
     function closeModal() {
