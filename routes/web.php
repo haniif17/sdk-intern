@@ -10,6 +10,7 @@ use App\Models\Booking;
 use App\Http\Controllers\Admin\BookingApprovalController;
 use App\Http\Controllers\KomunitasRegisterController;
 use App\Http\Controllers\Admin\KomunitasController;
+use App\Http\Controllers\HolidayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,10 +33,7 @@ Route::get('/komunitas', function () {
     return view('pages.komunitas', compact('komunitas'));
 });
 
-Route::get('/pesan-ruangan', function () {
-    $bookings = Booking::where('status', 'approved')->get();
-    return view('pages.pesan-ruangan', compact('bookings'));
-});
+Route::get('/pesan-ruangan', [BookingController::class, 'index']);
 
 Route::post('/booking', [BookingController::class, 'store']);
 
@@ -96,6 +94,10 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/booking/{id}/edit', [BookingApprovalController::class, 'edit'])->name('admin.booking.edit');
     Route::put('/admin/booking/{id}', [BookingApprovalController::class, 'update'])->name('admin.booking.update');
     Route::delete('/admin/booking/{id}', [BookingApprovalController::class, 'destroy'])->name('admin.booking.destroy');
+
+    // Holiday
+    Route::post('/admin/holidays/bulk', [HolidayController::class, 'storeBulk'])->name('holidays.bulk');
+    Route::delete('/admin/holidays/{id}', [HolidayController::class, 'destroy'])->name('holidays.destroy');
 });
 
 

@@ -114,21 +114,43 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    
-    // --- 1. LOGIKA VALIDASI TANGGAL (ROLE BASED: H-7 GUEST, H-3 KOMUNITAS) ---
     const dateInput = document.getElementById('tanggal_booking');
     const userRole = "{{ auth()->user() ? auth()->user()->role : 'guest' }}";
+    
+    // --- 1. AMBIL DATA DARI DATABASE (Tabel Holidays & Bookings) ---
+    const holidaysManual = @json($holidays ?? []);
+    const bookingEvents = @json($bookings ?? []);
 
+    // --- 2. LOGIKA VALIDASI TANGGAL SAAT INPUT ---
     dateInput.addEventListener('change', function() {
-        const selectedDate = new Date(this.value);
+        const selectedStr = this.value; // YYYY-MM-DD
+        const selectedDate = new Date(selectedStr);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
         const diffTime = selectedDate - today;
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
+        // A. Cek Apakah Hari Libur (Peringatan)
+        const isHoliday = holidaysManual.find(h => h.tanggal === selectedStr);
+        if (isHoliday) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Info Hari Libur',
+                text: `Tanggal tersebut adalah ${isHoliday.keterangan}. Tetap ingin melanjutkan pemesanan?`,
+                confirmButtonColor: '#ef4444',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Lanjutkan',
+                cancelButtonText: 'Pilih Tanggal Lain'
+            }).then((result) => {
+                if (!result.isConfirmed) {
+                    this.value = '';
+                }
+            });
+        }
+
+        // B. Cek Aturan H-7 / H-3 (Blokir Total)
         if (userRole === 'komunitas') {
-            // Aturan Komunitas: Minimal H-3
             if (diffDays < 3) {
                 Swal.fire({
                     icon: 'error',
@@ -139,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.value = ''; 
             }
         } else {
-            // Aturan Guest: Minimal H-7
             if (diffDays < 7) {
                 Swal.fire({
                     icon: 'warning',
@@ -152,22 +173,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // --- 2. KONFIGURASI KALENDER ---
+    // --- 3. KONFIGURASI KALENDER ---
     let calendarEl = document.getElementById('calendar');
-    let bookings = @json($bookings ?? []);
+    let events = [];
 
-    let events = bookings.map(function(b) {
-        return {
+    // Masukkan Data Bookingan Orang Lain (Merah Solid)
+    bookingEvents.forEach(b => {
+        events.push({
             title: b.nama_komunitas,
             start: b.tanggal,
-            color: 'red',
-            extendedProps: {
-                komunitas: b.nama_komunitas,
-                ruangan: b.ruangan,
-                waktu: b.waktu,
-                tanggal: b.tanggal
-            }
-        };
+            color: '#ef4444',
+            extendedProps: { type: 'booking', ...b }
+        });
+    });
+
+    // Masukkan Data Hari Libur Manual (Merah Muda / Pink)
+    holidaysManual.forEach(h => {
+        events.push({
+            title: "🔴 " + h.keterangan,
+            start: h.tanggal,
+            color: '#fee2e2',
+            textColor: '#991b1b',
+            allDay: true,
+            extendedProps: { type: 'holiday', keterangan: h.keterangan }
+        });
     });
 
     let calendar = new FullCalendar.Calendar(calendarEl, {
@@ -175,8 +204,21 @@ document.addEventListener('DOMContentLoaded', function () {
         events: events,
         eventClick: function(info) {
             let e = info.event;
+            
+            // Jika Klik Hari Libur
+            if(e.extendedProps.type === 'holiday') {
+                Swal.fire({
+                    title: 'Hari Libur Nasional',
+                    text: e.extendedProps.keterangan,
+                    icon: 'info',
+                    confirmButtonColor: '#ef4444'
+                });
+                return;
+            }
+
+            // Jika Klik Bookingan
             document.getElementById('modalTitle').innerText = e.title;
-            document.getElementById('modalKomunitas').innerText = "Komunitas: " + e.extendedProps.komunitas;
+            document.getElementById('modalKomunitas').innerText = "Komunitas: " + e.extendedProps.nama_komunitas;
             document.getElementById('modalRuangan').innerText = "Ruangan: " + e.extendedProps.ruangan;
             document.getElementById('modalWaktu').innerText = "Waktu: " + e.extendedProps.waktu;
             document.getElementById('modalTanggal').innerText = "Tanggal: " + e.startStr;
@@ -190,7 +232,6 @@ document.addEventListener('DOMContentLoaded', function () {
     calendar.render();
 });
 
-// Close modal logic
 function closeBookingModal(event = null) {
     if (event && event.target !== document.getElementById('bookingModal')) return;
     document.getElementById('bookingModal').classList.add('hidden');
@@ -198,6 +239,14 @@ function closeBookingModal(event = null) {
     document.body.classList.remove('overflow-hidden');
 }
 </script>
+
+{{-- SCRIPT SESSION --}}
+@if(session('success'))
+    <script>Swal.fire({ icon: 'success', title: 'Berhasil!', text: "{{ session('success') }}", confirmButtonColor: '#ef4444' });</script>
+@endif
+@if(session('error'))
+    <script>Swal.fire({ icon: 'error', title: 'Gagal!', text: "{{ session('error') }}", confirmButtonColor: '#ef4444' });</script>
+@endif
 
 {{-- MODAL DETAIL BOOKING --}}
 <div id="bookingModal" onclick="closeBookingModal(event)" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">

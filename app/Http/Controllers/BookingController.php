@@ -4,10 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Booking;
-use Illuminate\Support\Carbon; // Wajib ada buat ngitung tanggal
+use App\Models\Holiday; // Memastikan model Holiday terpakai
+use Illuminate\Support\Carbon;
 
 class BookingController extends Controller
 {
+    // --- FUNGSI UNTUK MENAMPILKAN HALAMAN PESAN RUANGAN ---
+    public function index()
+    {
+        // 1. Ambil data booking yang sudah approved untuk tampil di kalender
+        $bookings = Booking::where('status', 'approved')->get();
+
+        // 2. Ambil data hari libur yang sudah lu input di Admin Panel
+        $holidays = Holiday::all();
+
+        // 3. Kirim kedua data tersebut ke view
+        return view('pages.pesan-ruangan', compact('bookings', 'holidays'));
+    }
+
     public function store(Request $request)
     {
         // 1. VALIDASI INPUT DASAR
@@ -23,7 +37,7 @@ class BookingController extends Controller
         // 2. LOGIKA VALIDASI TANGGAL (H-7 GUEST, H-3 KOMUNITAS)
         $today = Carbon::today();
         $bookingDate = Carbon::parse($request->tanggal);
-        $diffDays = $today->diffInDays($bookingDate, false); // false biar kalau pilih tanggal lampau hasilnya negatif
+        $diffDays = $today->diffInDays($bookingDate, false);
 
         $user = auth()->user();
         $role = $user ? $user->role : 'guest';
@@ -54,6 +68,15 @@ class BookingController extends Controller
             return back()->with('error', 'Ruangan sudah dibooking di waktu tersebut!');
         }
 
+        // --- TAMBAHAN: LOGIKA PENGECEKAN HARI LIBUR UNTUK LOG DATABASE ---
+        $hariLibur = Holiday::where('tanggal', $request->tanggal)->first();
+        $catatanLog = "Pemesanan baru."; // Pesan default
+
+        if ($hariLibur) {
+            // Jika tanggal booking pas dengan hari libur, buat catatan khusus
+            $catatanLog = "Peringatan: Booking pada hari libur (" . $hariLibur->keterangan . ")";
+        }
+
         // 4. SIMPAN DATA
         Booking::create([
             'nama_kegiatan' => $request->nama_kegiatan,
@@ -62,7 +85,8 @@ class BookingController extends Controller
             'ruangan' => $request->ruangan,
             'waktu' => $request->waktu,
             'no_hp' => $request->no_hp,
-            'status' => 'pending'
+            'status' => 'pending',
+            'log' => $catatanLog // Kolom log otomatis terisi info libur
         ]);
 
         return back()->with('success', 'Booking berhasil! Menunggu persetujuan admin.');

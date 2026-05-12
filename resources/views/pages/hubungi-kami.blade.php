@@ -49,11 +49,11 @@
             </div>
             <h3 class="text-xl font-semibold text-gray-800 mb-3">Telepon</h3>
             <p class="text-gray-600 leading-relaxed text-sm mb-1">
-                Syahdana
+                Dev by @syhdaana
             </p>
             {{-- Dibikin link biar bisa langsung diklik buat nelpon --}}
             <a href="tel:+628774447348" class="text-blue-600 font-medium hover:underline text-lg">
-                +62 877-4447-348
+                +62 123-456-789
             </a>
         </div>
 
