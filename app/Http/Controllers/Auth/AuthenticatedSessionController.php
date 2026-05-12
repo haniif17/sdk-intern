@@ -32,14 +32,18 @@ class AuthenticatedSessionController extends Controller
         // Ambil role user yang login
         $role = $request->user()->role;
 
-        // Arahkan ke nama rute yang sudah kita buat di web.php
+        /**
+         * Penyesuaian Redirect:
+         * Admin tetap ke Dashboard Admin.
+         * Komunitas diarahkan ke Homepage (/).
+         */
         if ($role === 'admin') {
             return redirect()->intended(route('admin.dashboard'));
         } elseif ($role === 'komunitas') {
-            return redirect()->intended(route('komunitas.dashboard'));
+            return redirect()->intended('/'); // Diubah dari dashboard ke homepage
         }
 
-        // Fallback kalau role nggak jelas
+        // Fallback kalau role tidak dikenali
         return redirect()->intended('/');
     }
 
