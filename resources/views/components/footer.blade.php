@@ -29,7 +29,7 @@
             <h4 class="text-lg font-semibold text-gray-800 mb-4">Kontak</h4>
             <ul class="space-y-2 text-sm text-gray-600">
                 <li>📍 Jl. Tri Lomba Juang, Semarang</li>
-                <li>📞 +62 877-4447-348</li>
+                <li>📞 +62 123-456-789</li>
                 <li>🕒 Buka: 08:00 - 22:00</li>
             </ul>
         </div>
