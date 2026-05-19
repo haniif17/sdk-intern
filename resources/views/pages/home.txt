@@ -3,7 +3,12 @@
 @section('content')
 
 @php
-    $heroes = \App\Models\Hero::latest()->get();
+    // --- PENYESUAIAN PATH: Sekarang bener nembak ke public/hero/ ---
+    $heroes = [
+        (object)[ 'image' => 'images/hero/banner1.png' ],
+        (object)[ 'image' => 'images/hero/banner2.jpg' ],
+        (object)[ 'image' => 'images/hero/banner3.jpg' ],
+    ];
 @endphp
 
 <style>
@@ -240,7 +245,7 @@
 
         {{-- IMAGE LOOP --}}
         @foreach($heroes as $index => $hero)
-            <div class="hero-slide {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" style="z-index: {{ $index === 0 ? 10 : 0 }};">
+            <div class="hero-slide {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}" style="z-index: {{ $index === 0 ? 10 : 0 }}; transition: opacity 0.8s cubic-bezier(.4,0,.2,1);">
                 <img src="{{ asset($hero->image) }}" class="hero-img" alt="Hero {{ $index + 1 }}">
             </div>
         @endforeach
@@ -521,7 +526,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function nextSlide() { showSlide((current + 1) % slides.length); }
     function prevSlide() { showSlide((current - 1 + slides.length) % slides.length); }
 
-    function startSlider() { interval = setInterval(nextSlide, 4000); }
+    // --- TIME CONFIGURATION: Tetap 1 detik (1000ms) ---
+    function startSlider() { interval = setInterval(nextSlide, 2500); }
     function stopSlider() { clearInterval(interval); }
 
     nextBtn.addEventListener('click', () => { stopSlider(); nextSlide(); startSlider(); });
@@ -600,7 +606,7 @@ document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { doc
 
         <div style="padding:28px;">
             <p style="font-size:14.5px;color:#444;line-height:1.75;text-align:justify;margin:0 0 24px;">
-                Semarang Digital Kreatif (SDK) adalah coworking space dan pusat komunitas digital yang diinisiasi oleh Pemerintah Kota Semarang bersama mitra (seperti Telkom/Indigospace) untuk memfasilitasi komunitas kreatif dan IT. Diresmikan pada 2016, SDK menyediakan ruang kerja gratis, fasilitas internet, dan ruang pertemuan untuk berkolaborasi serta mengembangkan konten digital di Semarang.
+                Semarang Digital Kreatif (SDK) adalah coworking space dan pusat komunitas digital yang diinisiasi oleh Pemerintah Kota Semarang bersama mitra (seperti Telkom/Indigospace) untuk memfasilitasi komunitas kreatif and IT. Diresmikan pada 2016, SDK menyediakan ruang kerja gratis, fasilitas internet, dan ruang pertemuan untuk berkolaborasi serta mengembangkan konten digital di Semarang.
             </p>
             <div style="display:flex;justify-content:flex-end;">
                 <button onclick="document.getElementById('sdkModal').classList.add('hidden')"
