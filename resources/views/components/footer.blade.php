@@ -7,9 +7,11 @@
             <p class="text-sm leading-relaxed mb-6 text-gray-600">
                 Semarang Digital Kreatif (SDK) adalah coworking space dan pusat komunitas digital untuk memfasilitasi komunitas kreatif dan IT di Semarang.
             </p>
-            {{-- Button Pesan Ruangan (Merah) --}}
             <a href="/pesan-ruangan" class="inline-block bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
                 Pesan Ruangan
+            </a>
+            <a href="/daftar-komunitas" class="inline-block mt-3 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                Daftar Komunitas
             </a>
         </div>
 
